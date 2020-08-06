@@ -23,22 +23,46 @@ const assert = require("assert");
  *
  */
 const urlify = (str, trueLength) => {
-  const strArr = str.split("");
-  let idx = str.length - 1;
+  const arr = str.split('');
+  // console.log(arr);
+  // count number of spaces to determine final length of url
+  let spaces = 0;
+  for(let i=0; i<trueLength; i++){
+    if(arr[i] === ' ') spaces++;
+  }
 
-  for (let i = trueLength - 1; i >= 0; i--) {
-    if (strArr[i] === " ") {
-        strArr[idx] = "0";
-        strArr[idx - 1] = "2";
-        strArr[idx - 2] = "%";
-      idx -= 3;
+  let endPointer = (trueLength + (spaces * 2)) - 1;
+  for(let i=trueLength-1; i>0; i--) {
+    if(arr[i] !== ' '){
+      [ arr[i], arr[endPointer] ] = [ arr[endPointer], arr[i] ];
+      endPointer--;
     } else {
-        strArr[idx] = strArr[i];
-      idx -= 1;
+      // move endPointer up
+      endPointer = endPointer - 3;
+      // add '%20'
+      arr[endPointer + 1] = '%';
+      arr[endPointer + 2] = '2';
+      arr[endPointer + 3] = '0';
+    }
+    
+  }
+  return arr.join('');
+};
+
+console.log(urlify("Mr John Smith    ", 13));
+
+
+const urlifyJS = (str, trueLength) => {
+  const arr = str.split('').splice(0, trueLength);
+  for(let i=0; i<arr.length; i++) {
+    if(arr[i] == ' '){
+      arr[i] = '%20';
     }
   }
-  return strArr.join("");
-};
+  return arr.join('');
+}
+
+console.log(urlifyJS("Mr John Smith    ", 13));
 
 describe(module.filename, () => {
   it("should return the modified string with %20 in place of spaces", () => {

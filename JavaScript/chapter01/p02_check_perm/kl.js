@@ -24,26 +24,39 @@ const { DH_CHECK_P_NOT_PRIME } = require("constants");
  * Space:   O(N)
  *
  */
-const checkPermutation1 = (A, B) => {
-  if (A.length !== B.length) return false;
-  const aFreq = {};
-  const bFreq = {};
-  for (const a of A) {
-    aFreq[a] = (aFreq[a] || 0) + 1;
+const checkPermutation1 = function (A, B){
+
+  // if strings are not same length, exit
+  if( A.length !== B.length ) return false;
+
+  // set up mapping of char in each string and their frequencies
+  const hashA = {};
+  const hashB = {};
+  for (const char of A) { 
+    hashA[char] = (hashA[char] || 0) + 1;
   }
-  for (const b of B) {
-    bFreq[b] = (bFreq[b] || 0) + 1;
+  for (const char of B) {
+    hashB[char] = (hashB[char] || 0) + 1;
   }
 
-  const aKeys = Object.keys(aFreq);
-  const bKeys = Object.keys(bFreq);
-  if (aKeys.length !== bKeys.length) return false;
-  for (let i = 0; i < aKeys.length; i++) {
-    if (aFreq[aKeys[i]] !== bFreq[aKeys[i]]) return false;
+  // if key lengths of hashA and hashB are different, exit
+  const keysA = Object.keys(hashA);
+  const keysB = Object.keys(hashB);
+  if( keysA.length !== keysB.length ) return false;
+
+  // if key frequencies don't match, exit
+  // you only need to loop through once, because the lenght should be the same
+  for(let i=0; i<keysA.length; i++){
+    if(hashA[keysA[i]] !== hashB[keysA[i]]) return false;
   }
 
+  // otherwise return true
   return true;
+
 };
+
+// console.log(checkPermutation1('abcd', 'cbda'));
+// console.log(checkPermutation1('abbc', 'abbd'));
 
 /**
  * Checks if a string is a permutation of another
@@ -63,17 +76,17 @@ const checkPermutation1 = (A, B) => {
  *
  */
 const checkPermutation2 = (A, B) => {
-  if (A.length !== B.length) return false;
-
-  A = A.split("").sort().join("");
-  B = B.split("").sort().join("");
-
+  A = A.split('').sort().join('');
+  B = B.split('').sort().join('');
   return A === B;
 };
 
+// console.log(checkPermutation2('abcd', 'cbda'));
+// console.log(checkPermutation2('abbc', 'abbd'));
+
 const checkPermutations = [checkPermutation1, checkPermutation2];
 checkPermutations.forEach((checkPerm) => {
-  describe(checkPerm.name, () => {
+  describe(module.filename + '--' + checkPerm.name, () => {
     it("should return false on input strings not of the same size", () => {
       const A = "hello";
       const B = "hi";

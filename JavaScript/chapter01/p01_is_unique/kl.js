@@ -17,11 +17,11 @@ const assert = require("assert");
  */
 // with additional data structures
 const isUnique1 = (str) => {
-  let temp = new Set();
-  arr = str.split('');
-  for(let i=0; i<arr.length; i++){
-    if(!temp.has(arr[i])) {
-      temp.add(arr[i]);
+  const temp = new Set();
+
+  for (const char of str) {
+    if(!temp.has(char)) {
+      temp.add(char);
     } else {
       return false;
     }
@@ -46,16 +46,23 @@ const isUnique1 = (str) => {
  */
 // without additional data structures
 const isUnique2 = (str) => {
-
+  for(let i=0; i<str.length; i++) {
+    for(let j=i+1; j<str.length; j++) {
+      if(str[i] === str[j]) {
+        return false
+      }
+    }
+  }
+  return true;
 };
 
 describe(module.filename, () => {
   it("should return true on an input string with unique characters", () => {
     assert.equal(isUnique1("tech"), true);
-    // assert.equal(isUnique2("tech"), true);
+    assert.equal(isUnique2("tech"), true);
   });
   it("should return false on an input string with non-unique characters", () => {
     assert.equal(isUnique1("techqueria"), false);
-    // assert.equal(isUnique2("techqueria"), false);
+    assert.equal(isUnique2("techqueria"), false);
   });
 });

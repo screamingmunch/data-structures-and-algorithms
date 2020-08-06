@@ -20,27 +20,50 @@ const assert = require("assert");
  *
  */
 const palindromePerm = (str) => {
-  const letterFreqs = {};
-  let length = 0;
-  for (const letter of str) {
-    if (letter === " ") continue;
 
-    letterFreqs[letter.toLowerCase()] =
-      (letterFreqs[letter.toLowerCase()] || 0) + 1;
-    length += 1;
+  // if str is even --> all elements need to occur even amount of times
+  // if str is odd  --> all elements except one need to occur even amount of times
+  // ignore spaces
+
+  str = str.split(' ').join('');
+  // str = str.replace(/\s+/g, '');
+
+  const charCount = {};
+  let oddCountInstance = 0;
+  for (const char of str) {
+      charCount[char.toLowerCase()] = (charCount[char.toLowerCase()] || 0) +1;
   }
 
-  let slack = length % 2 == 1;
-  for (const letterFreq of Object.values(letterFreqs)) {
-    if (letterFreq % 2 === 0) continue;
-
-    if (!slack) return false;
-
-    slack = !slack;
+  console.log(charCount);
+  
+  for (const key in charCount) {
+    
+    // even case
+    if(isEven(str.length)) {
+      if( !isEven(charCount[key]) ) return false;
+    } else {
+      // odd case
+      if( !isEven(charCount[key])) {
+        oddCountInstance++;
+      }
+    }
   }
+
+  if(!isEven(str.length) && oddCountInstance>1) return false;
 
   return true;
+
 };
+
+const isEven = (num) => {
+  if(num%2 == 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+console.log(palindromePerm('techqueria'));
+console.log(palindromePerm('Tact C o  a     '));
 
 describe(module.filename, () => {
   it("should return true when the input string can be rearranged in the form of a palindrome.", () => {
