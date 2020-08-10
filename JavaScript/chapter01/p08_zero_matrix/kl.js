@@ -16,32 +16,42 @@ const assert = require("assert");
  * Space:   O(M + N)
  *
  */
-const zeroMatrix = (arr) => {
-  if (arr.length === 0 || arr[0].length === 0) return;
-  const rows = new Array(arr.length).fill(false);
-  const cols = new Array(arr[0].length).fill(false);
+const zeroMatrix = (matrix) => {
 
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = 0; j < arr[0].length; j++) {
-      if (arr[i][j] !== 0) continue;
-      rows[i] = true;
-      cols[j] = true;
+  if(matrix.length === 0) return;
+  const rows = new Array(matrix.length).fill(false);
+  const cols = new Array(matrix[0].length).fill(false);
+
+
+  if(rows == 0) return;
+
+  for(let i = 0; i < rows.length; i++) {
+    for(let j = 0; j < cols.length; j++) {
+      if(matrix[i][j] == 0) {
+        rows[i] = true;
+        cols[j] = true;
+      }
     }
   }
 
-  for (let i = 0; i < arr.length; i++) {
-    if (!rows[i]) continue;
-    for (let j = 0; j < arr[0].length; j++) {
-      arr[i][j] = 0;
+  // nullify rows
+  for(let i = 0; i < rows.length; i++) {
+    if(rows[i]) {
+      for(let j = 0; j < cols.length; j++) {
+        matrix[i][j] = 0;
+      }
     }
   }
 
-  for (let j = 0; j < arr[0].length; j++) {
-    if (!cols[j]) continue;
-    for (let i = 0; i < arr.length; i++) {
-      arr[i][j] = 0;
+  // nullify cols
+  for(let j = 0; j < cols.length; j++) {
+    if(cols[j]) {
+      for(let i = 0; i < rows.length; i++) {
+        matrix[i][j] = 0;
+      }
     }
   }
+
 };
 
 describe(module.filename, () => {

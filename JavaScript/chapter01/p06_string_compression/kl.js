@@ -23,25 +23,17 @@ const assert = require("assert");
  *
  */
 const compress = (str) => {
-  let outputStrArr = [];
-  let idx = 0;
-
-  while (idx < str.length) {
-    const currLetter = str[idx];
-    let freq = 1;
-
-    let next = idx + 1;
-    while (next < str.length && currLetter === str[next]) {
-      next += 1;
-      freq += 1;
+  let indx1 = 0;
+  let indx2 = 0;
+  let newStr = "";
+  while(indx1 < str.length && indx2 <= str.length) {
+    if(str[indx1] !== str[indx2]) {
+      newStr = newStr.concat(str[indx1].concat(indx2 - indx1));
+      indx1 = indx2;
     }
-
-    outputStrArr.push(currLetter);
-    outputStrArr.push(freq);
-    idx = next;
+    indx2++;
   }
-
-  return outputStrArr.length < str.length ? outputStrArr.join("") : str;
+  return ((newStr.lenghth < str.length) ? newStr : str);
 };
 
 describe(module.filename, () => {

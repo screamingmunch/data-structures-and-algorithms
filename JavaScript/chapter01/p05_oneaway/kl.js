@@ -23,36 +23,57 @@ const assert = require("assert");
  *
  */
 const oneAway = (A, B) => {
-  if (Math.abs(A.length - B.length) > 1) return false;
-
-  if (A.length === B.length) {
-    let slack = true;
-    for (let i = 0; i < A.length; i++) {
-      if (A[i] === B[i]) continue;
-
-      if (!slack) return false;
-      slack = !slack;
-    }
-    return true;
+  // if A.len == B.len
+  // check one replace away
+  if(A.length == B.length) {
+    return oneReplaceAway(A, B);
+  } else if(A.length + 1 == B.length) {
+    return oneInsertAway(A, B);
+  } else if(A.length - 1 == B.length) {
+    return oneInsertAway(B, A);
+  } else {
+    return false
   }
 
-  const shortStr = A.length < B.length ? A : B;
-  const longStr = A.length < B.length ? B : A;
-  let sIdx = 0;
-  let lIdx = 0;
-  let slack = true;
-  while (sIdx < shortStr.length + 1 && lIdx < longStr.length) {
-    if (shortStr[sIdx] === longStr[lIdx]) {
-      sIdx += 1;
-      lIdx += 1;
-    } else {
-      if (!slack) return false;
-      slack = !slack;
-      lIdx += 1;
+  
+};
+
+const oneReplaceAway = (str1, str2) => {
+  // basically check if there's only one delta
+  // same length
+  let diffFound = false;
+  for(let i=0; i<str1.length; i++) {
+    if(str1[i] !== str2[i]) {
+      if(diffFound){
+        return false;
+      } else {
+        diffFound = true;
+      }
     }
   }
   return true;
-};
+}
+
+
+const oneInsertAway = (str1, str2) => {
+  // keep str2 as the longer one always 
+  let indx1 = 0;
+  let indx2 = 0;
+  while(indx2 < str2.length && indx1 < str1.length) {
+    if(str1[indx1] !== str2[indx2]) {
+      if(indx1 !== indx2) {
+        return false;
+      }
+      indx2++;
+    } else {
+      indx1++;
+      indx2++;
+    }
+  }
+  return true;
+}
+
+
 
 describe(module.filename, () => {
   it("should return true when input strings are equal.", () => {
